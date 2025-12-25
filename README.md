@@ -4,6 +4,8 @@
 
 This project is a deep learning system for classifying brain MRI scans into four categories using a fine-tuned EfficientNet-B0 model.  
 It achieves **99.39% test accuracy** and includes **Explainable AI (XAI)** using Grad-CAM to visualize model attention.
+![UI overview](assets/UI Overview.png)
+
 
 ---
 
@@ -124,6 +126,8 @@ python src/evaluate.py
 ```
 
 This generates classification reports and confusion matrices.
+![Confusion Matrix](assets/ConsusionMatrix.png)
+
 
 ---
 
@@ -141,6 +145,8 @@ Grad-CAM heatmaps are overlaid on MRI images to visualize model attention:
 
 - Red regions: High attention (likely tumor regions)
 - Blue regions: Low attention (background or healthy tissue)
+![Heatmap Visualization](assets/HeatMap.png)
+
 
 ---
 
