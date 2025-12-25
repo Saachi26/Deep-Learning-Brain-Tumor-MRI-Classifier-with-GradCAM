@@ -1,0 +1,16 @@
+# Ignore virtual environment
+venv/
+env/
+.env
+
+# Ignore compiled python files
+__pycache__/
+*.pyc
+
+# Ignore system files
+.DS_Store
+
+# Ignore large data and models (Optional but recommended)
+# If your data is >100MB, GitHub will block the push.
+data/
+models/
