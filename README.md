@@ -4,7 +4,7 @@
 
 This project is a deep learning system for classifying brain MRI scans into four categories using a fine-tuned EfficientNet-B0 model.  
 It achieves **99.39% test accuracy** and includes **Explainable AI (XAI)** using Grad-CAM to visualize model attention.
-![UI overview](assets/UI Overview.png)
+![UI overview](assets/UIOverview.png)
 
 
 ---
@@ -126,7 +126,7 @@ python src/evaluate.py
 ```
 
 This generates classification reports and confusion matrices.
-![Confusion Matrix](assets/ConsusionMatrix.png)
+![Confusion Matrix](assets/ConfusionMatrix.png)
 
 
 ---
