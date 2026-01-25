@@ -57,7 +57,7 @@ BRAINTUMORMRI/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Explainable-Deep-Learning-Brain-Tumor-MRI-Classifier.git
+git clone https://github.com/Saachi26/Deep-Learning-Brain-Tumor-MRI-Classifier-with-GradCAM.git
 cd Explainable-Deep-Learning-Brain-Tumor-MRI-Classifier
 ```
 
