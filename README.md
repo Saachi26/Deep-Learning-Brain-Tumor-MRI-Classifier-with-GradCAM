@@ -1,221 +1,141 @@
-# Deep Learning Brain Tumor MRI Classifier
+# 🧠 Deep Learning Brain Tumor MRI Classifier
 
-## 🧠 Project Overview
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue?logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.8-EE4C2C?logo=pytorch&logoColor=white)
+![EfficientNet-B0](https://img.shields.io/badge/Model-EfficientNet--B0-success)
+![Accuracy](https://img.shields.io/badge/Test%20Accuracy-95.19%25-brightgreen)
+![ROC-AUC](https://img.shields.io/badge/ROC--AUC-0.995-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-This project is a deep learning system for classifying brain MRI scans into four categories using a fine-tuned EfficientNet-B0 model.  
-It achieves **95.19% test accuracy** and **0.995 ROC-AUC** on a held-out, class-balanced test set of 1,600 images, with **100% specificity** (zero healthy scans misflagged as tumors), and includes **Explainable AI (XAI)** using Grad-CAM to visualize model attention.
+Four-class brain-tumour MRI classifier built on EfficientNet-B0, with Grad-CAM
+explainability and a Streamlit diagnostic interface. Every number in this README is
+measured on a held-out test set and reproducible with one command.
+
 ![UI overview](assets/UIOverview.png)
 
+---
+
+## 📊 Results at a glance
+
+Measured on **1,600 held-out images** (400 per class) never seen during training:
+
+| | | | |
+|---|---|---|---|
+| **Test accuracy** | **95.19%** | **ROC-AUC** (OvR macro) | **0.9950** |
+| **Macro F1** | **0.9509** | Test loss | 0.4739 |
+| **Specificity** (tumour vs. healthy) | **100.00%** | Sensitivity | 97.83% |
+| Cohen's κ | 0.9358 | Matthews corr. | 0.9374 |
+| Inference | 14.96 ms/image | Model size | 4.01M params / 16.35 MB |
+
+Two results worth highlighting:
+
+- **Zero false positives.** Across 400 healthy scans, the model never flagged one as a tumour.
+- **Augmented fine-tuning cut test errors by 31%** (111 → 77 misclassifications) and
+  eliminated all three remaining false positives.
+
+Reproduce everything with `python src/report_metrics.py` → writes
+[`reports/metrics.json`](reports/metrics.json) and [`reports/metrics.md`](reports/metrics.md).
 
 ---
 
-## 🎯 Key Features
+## 🎯 What it does
 
-- Multi-class classification: Glioma, Meningioma, Pituitary Tumor, No Tumor
-- EfficientNet-B0 with transfer learning
-- Grad-CAM heatmap visualizations
-- Streamlit-based web interface
-- Data augmentation for robust training
-
----
-
-## 📂 Directory Structure
-
-```
-BRAINTUMORMRI/
-│
-├── data/
-├── models/
-├── src/
-│   ├── app.py
-│   ├── augmentedFinetune.py
-│   ├── evaluate.py
-│   ├── finetune.py
-│   ├── predict.py
-│   ├── report_metrics.py
-│   └── train.py
-│
-├── reports/            # generated metrics, tables, confusion matrices
-│   ├── metrics.json
-│   └── metrics.md
-│
-├── assets/
-├── venv/
-├── requirements.txt
-├── .gitignore
-└── README.md
-```
+- **Four-class classification** — glioma, meningioma, pituitary tumour, no tumour
+- **Transfer learning** — ImageNet-pretrained EfficientNet-B0, fine-tuned in two stages
+- **Grad-CAM explainability** — heatmaps showing which pixels drove each prediction
+- **Streamlit interface** — upload a scan, get a class, confidence breakdown, and heatmap
+- **Reproducible evaluation** — one script regenerates every metric and figure in this README
 
 ---
 
-## 🛠️ Tech Stack
-
-- Deep Learning: PyTorch, timm
-- Model: EfficientNet-B0
-- Computer Vision: OpenCV, Torchvision, PIL
-- Explainability: pytorch-grad-cam
-- Interface: Streamlit
-- Data Handling: NumPy, Matplotlib, Scikit-learn
-
----
-
-## 🚀 Installation & Setup
-
-### 1. Clone the Repository
+## 🚀 Quickstart
 
 ```bash
 git clone https://github.com/Saachi26/Deep-Learning-Brain-Tumor-MRI-Classifier-with-GradCAM.git
 cd Deep-Learning-Brain-Tumor-MRI-Classifier-with-GradCAM
-```
-
-### 2. Create a Virtual Environment (Recommended)
-
-```bash
-python -m venv venv
-```
-
-Activate it:
-
-**Windows**
-```bash
-venv\Scripts\activate
-```
-
-**Mac/Linux**
-```bash
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
-
-```bash
+python -m venv venv && source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Ensure `torch`, `timm`, `streamlit`, `opencv-python`, and `grad-cam` are installed.
-
----
-
-## 📥 Dataset Setup
-
-The dataset is **not** included in this repo (it is large and license-restricted).
-Download the **Brain Tumor MRI Dataset** from Kaggle:
-
-https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset
-
-Unzip it into the `data/` folder so the structure looks exactly like this
-(folder names are case-sensitive and must match):
-
-```
-data/
-├── Training/
-│   ├── glioma/
-│   ├── meningioma/
-│   ├── notumor/
-│   └── pituitary/
-└── Testing/
-    ├── glioma/
-    ├── meningioma/
-    ├── notumor/
-    └── pituitary/
-```
-
-> The training/evaluation scripts read from `data/Training` and `data/Testing`.
-
----
-
-## ⚠️ Trained Model Required to Run the App
-
-The Streamlit app and `evaluate.py` load a trained weights file:
-
-```
-models/brain_tumor_efficientnet_augmented.pth
-```
-
-This file is **not** committed (it is large). You must either:
-
-1. **Train it yourself** (see "Train the Model" below — run the scripts in order), or
-2. **Copy your own saved `.pth`** into the `models/` folder with that exact name.
-
-Without this file, `streamlit run src/app.py` will fail to start.
-
----
-
-## 💻 Usage
-
-### Run the Web Application
+Then add the [dataset](#dataset) and [trained weights](#trained-weights), and run:
 
 ```bash
 streamlit run src/app.py
 ```
 
-Upload an MRI image to receive:
-- Predicted tumor class
-- Grad-CAM heatmap visualization
+---
+
+<a id="dataset"></a>
+
+## 📥 Dataset
+
+Not included in this repo (large, license-restricted). Download the
+[**Brain Tumor MRI Dataset**](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)
+by Nickparvar and unzip into `data/` so the structure matches exactly (folder names are
+case-sensitive):
+
+```
+data/
+├── Training/{glioma,meningioma,notumor,pituitary}/
+└── Testing/{glioma,meningioma,notumor,pituitary}/
+```
+
+| Split | glioma | meningioma | notumor | pituitary | Total |
+|---|---|---|---|---|---|
+| Training pool | 1,400 | 1,400 | 1,400 | 1,400 | 5,600 |
+| Test (held out) | 400 | 400 | 400 | 400 | 1,600 |
+| | | | | | **7,200** |
+
+The training pool is split 80/20 at train time → 4,480 train / 1,120 validation.
 
 ---
 
-### Train the Model
+<a id="trained-weights"></a>
 
-The scripts form a chain — run them **in this order**:
+## ⚠️ Trained weights
 
-**Step 1 — Initial training** (downloads ImageNet-pretrained EfficientNet-B0 and
-trains on the MRI data; saves `models/brain_tumor_efficientnet.pth`):
-
-```bash
-python src/train.py
-```
-
-**Step 2 — Augmented fine-tuning** (loads the Step 1 weights, fine-tunes with data
-augmentation; saves `models/brain_tumor_efficientnet_augmented.pth` — this is the
-file the app uses):
-
-```bash
-python src/augmentedFinetune.py
-```
-
-> `src/finetune.py` is an earlier, simpler fine-tuning experiment. It is **not**
-> part of the final pipeline (the app loads the `_augmented.pth` weights).
+The app and evaluation scripts load `models/brain_tumor_efficientnet_augmented.pth`,
+which is **not committed** (too large for git). Either train it yourself (below) or drop
+your own checkpoint in `models/` under that exact filename. Without it,
+`streamlit run src/app.py` will not start.
 
 ---
 
-### Evaluate the Model
+## 💻 Usage
+
+### Run the app
 
 ```bash
-python src/evaluate.py
+streamlit run src/app.py
 ```
 
-This prints a classification report and shows a confusion matrix for the final model.
+Upload an MRI scan to get a predicted class, a per-class confidence breakdown, and a
+Grad-CAM heatmap.
 
-For the **full, reproducible metrics report** — every model in `models/` scored on the
-held-out test set, written to `reports/metrics.json`, `reports/metrics.md`, and a
-confusion matrix per model:
+### Train
+
+The scripts form a chain — run in order:
 
 ```bash
-python src/report_metrics.py
+python src/train.py              # Stage 1: ImageNet-pretrained B0 → brain_tumor_efficientnet.pth
+python src/augmentedFinetune.py  # Stage 2: augmented fine-tune → ..._augmented.pth  (app uses this)
 ```
 
-![Confusion Matrix](assets/ConfusionMatrix.png)
+> `src/finetune.py` is an earlier, simpler fine-tuning experiment. It is **not** part of
+> the final pipeline.
 
-*Confusion matrix for `brain_tumor_efficientnet_augmented.pth` on the 1,600-image held-out
-test set (95.19% accuracy). Regenerate with `python src/report_metrics.py`.*
+### Evaluate
 
+```bash
+python src/evaluate.py        # classification report + confusion matrix for the final model
+python src/report_metrics.py  # full report: every checkpoint, all metrics → reports/
+```
 
 ---
 
-## 📊 Model Performance
+## 📈 Model performance
 
-All numbers below are **measured on the held-out test set** (1,600 images, 400 per class,
-never seen in training or validation) by running:
-
-```bash
-python src/report_metrics.py
-```
-
-That script writes [`reports/metrics.json`](reports/metrics.json), a full write-up in
-[`reports/metrics.md`](reports/metrics.md), and per-model confusion matrices.
-
-### Headline results — `brain_tumor_efficientnet_augmented.pth`
+### Headline — `brain_tumor_efficientnet_augmented.pth`
 
 | Metric | Value |
 |---|---|
@@ -230,9 +150,9 @@ That script writes [`reports/metrics.json`](reports/metrics.json), a full write-
 | Cohen's κ | 0.9358 |
 | Matthews correlation coef. | 0.9374 |
 | Inference latency | 14.96 ms/image (66.9 img/s, Apple Silicon MPS) |
-| Model size | 4.01M params / 16.35 MB |
+| Model size | 4,012,672 params / 16.35 MB |
 
-### Per-class results
+### Per class
 
 | Class | Precision | Recall | F1 | Support |
 |---|---|---|---|---|
@@ -241,10 +161,17 @@ That script writes [`reports/metrics.json`](reports/metrics.json), a full write-
 | notumor | 0.9390 | **1.0000** | 0.9685 | 400 |
 | pituitary | 0.9852 | 0.9975 | 0.9913 | 400 |
 
-Glioma is the hardest class (83.0% recall — most confusions land on meningioma); every
-other class scores ≥98% recall.
+![Confusion Matrix](assets/ConfusionMatrix.png)
 
-### Tumor vs. no-tumor (binary view)
+*Confusion matrix on the 1,600-image held-out test set. Regenerate with
+`python src/report_metrics.py`.*
+
+Glioma is the weakest class at 83.0% recall — 43 gliomas are read as meningioma and 25 as
+no-tumour. Every other class scores ≥98% recall.
+
+### Tumour vs. no tumour
+
+Collapsing the three tumour classes into one "tumour present" label:
 
 | Metric | Value |
 |---|---|
@@ -253,62 +180,111 @@ other class scores ≥98% recall.
 | False positives | **0** |
 | False negatives | 26 / 1,200 |
 
-### Ablation — effect of augmented fine-tuning
+### Ablation — what augmented fine-tuning bought
 
 | Metric | Stage 1 (`train.py`) | Stage 2 (`augmentedFinetune.py`) | Δ |
 |---|---|---|---|
 | Test accuracy | 93.06% | **95.19%** | **+2.13 pts** |
 | Macro F1 | 0.9296 | **0.9509** | +0.0213 |
+| ROC-AUC | 0.9923 | **0.9950** | +0.0027 |
 | Misclassified | 111 | **77** | **−31% errors** |
 | glioma recall | 0.7675 | **0.8300** | +0.0625 |
 | False positives | 3 | **0** | −3 |
-
-### Dataset
-
-| Split | glioma | meningioma | notumor | pituitary | Total |
-|---|---|---|---|---|---|
-| Training pool | 1,400 | 1,400 | 1,400 | 1,400 | 5,600 |
-| Test (held out) | 400 | 400 | 400 | 400 | 1,600 |
-| | | | | | **7,200** |
-
-The training pool is split 80/20 at train time → 4,480 train / 1,120 validation.
 
 ### Training configuration
 
 | Item | Value |
 |---|---|
 | Architecture | EfficientNet-B0 (`timm`), ImageNet-pretrained |
-| Input | 224 × 224 RGB, ImageNet normalization |
+| Input | 224 × 224 RGB, ImageNet mean/std normalisation |
 | Loss / Optimizer | Cross-entropy / AdamW |
 | Stage 1 | LR 1e-3, 5 epochs, batch 32 |
 | Stage 2 | LR 1e-4, weight decay 1e-4, 10 epochs, batch 32 |
 | Stage 2 augmentation | HFlip, Rotation(15°), Affine translate 0.1, ColorJitter(0.2, 0.2) |
-
-> **Note on the earlier 99.39% figure.** That number was measured on the *original*
-> 7,023-image version of the Kaggle dataset, which its author has since replaced. It is
-> not reproducible against the data this repo now uses. **95.19% is the reproducible
-> result** on the current 7,200-image version, and is the number this project reports.
+| Hardware | Apple Silicon GPU via PyTorch MPS |
 
 ---
 
 ## 🔍 Explainability with Grad-CAM
 
-Grad-CAM heatmaps are overlaid on MRI images to visualize model attention:
+Grad-CAM is computed on `model.conv_head`, EfficientNet-B0's final convolutional layer,
+against the predicted class. The resulting activation map is upsampled and overlaid on
+the original scan:
 
-- Red regions: High attention (likely tumor regions)
-- Blue regions: Low attention (background or healthy tissue)
+- **Red** — high attention, pixels that most increased the predicted class score
+- **Blue** — low attention, background or tissue the model ignored
+
 ![Heatmap Visualization](assets/HeatMap.png)
 
+This is a debugging tool as much as a presentation one: if attention sits off the tumour
+while the model still predicts correctly, the prediction is being driven by something
+other than the lesion.
 
 ---
 
-## 🤝 Contributing
+## ⚖️ Limitations
 
-Contributions are welcome.  
-Please open an issue or submit a pull request for improvements or bug fixes.
+Stated plainly, because a number without its caveats is not a result.
+
+- **Not a medical device.** A research and portfolio project. Nothing here is validated
+  for clinical use.
+- **No patient-level split.** The Kaggle dataset ships no patient IDs, so slices cannot be
+  grouped by patient. Its Figshare component contains 3,064 slices from only 233 patients,
+  meaning many near-identical slices from the same patient exist in the data — and a random
+  split can place them on both sides of the train/test boundary. Accuracy measured this way
+  is optimistic relative to a patient-grouped split. See Zech et al. (2018) on this failure
+  mode in medical imaging.
+- **The model is confidently wrong.** Mean confidence is 99.78% on correct predictions but
+  still **88.08% on incorrect ones**. It is not calibrated and has no abstain mechanism, so
+  errors do not announce themselves.
+- **Glioma is the clinically important weak spot.** 25 gliomas were classified as no-tumour
+  — a false negative is the costliest error class here.
+- **Single run, no seeding.** Training scripts do not set a random seed, so the train/val
+  split and augmentation differ between runs. Results are from one architecture and one run,
+  not a seed-averaged estimate with confidence intervals.
+- **No external validation.** Everything is measured within a single dataset. The commonly
+  used "second" brain-tumour dataset (SARTAJ) shares source images with this one, so it
+  cannot serve as an independent test set.
+- **Robustness untested.** No evaluation under scanner or acquisition shift — noise, blur,
+  contrast or intensity changes of the kind that separate a benchmark from a clinic.
+
+> **On the earlier 99.39% figure.** Previous versions of this project reported 99.39%,
+> measured on the *original* 7,023-image release of the Kaggle dataset, which its author has
+> since replaced. That number is not reproducible against the data this repo now uses.
+> **95.19% is the reproducible result** on the current 7,200-image version.
+
+---
+
+## 📂 Project structure
+
+```
+├── src/
+│   ├── app.py                 # Streamlit interface
+│   ├── train.py               # Stage 1: initial training
+│   ├── augmentedFinetune.py   # Stage 2: augmented fine-tuning (final model)
+│   ├── finetune.py            # earlier experiment, not in the final pipeline
+│   ├── evaluate.py            # classification report + confusion matrix
+│   ├── predict.py             # single-image prediction + Grad-CAM
+│   └── report_metrics.py      # full reproducible metrics report
+├── reports/                   # generated: metrics.json, metrics.md, confusion matrices
+├── assets/                    # figures used in this README
+├── data/                      # dataset (not committed)
+├── models/                    # trained weights (not committed)
+└── requirements.txt
+```
+
+---
+
+## 🛠️ Tech stack
+
+**Deep learning** PyTorch · timm · EfficientNet-B0
+**Vision** Torchvision · OpenCV · Pillow
+**Explainability** pytorch-grad-cam
+**Metrics** scikit-learn · NumPy · Matplotlib
+**Interface** Streamlit
 
 ---
 
 ## 📜 License
 
-This project is licensed under the MIT License.
+MIT — see [LICENSE](LICENSE).
