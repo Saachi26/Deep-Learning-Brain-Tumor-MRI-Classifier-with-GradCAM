@@ -12,5 +12,9 @@ __pycache__/
 
 # Ignore large data and models (Optional but recommended)
 # If your data is >100MB, GitHub will block the push.
-data/
-models/
+# We ignore the *contents* but keep the empty folders (via .gitkeep)
+# so the expected structure survives a fresh clone.
+data/*
+models/*
+!data/.gitkeep
+!models/.gitkeep

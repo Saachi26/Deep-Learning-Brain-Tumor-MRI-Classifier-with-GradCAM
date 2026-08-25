@@ -1,0 +1,217 @@
+{
+  "dataset": {
+    "train": {
+      "per_class": {
+        "glioma": 1400,
+        "meningioma": 1400,
+        "notumor": 1400,
+        "pituitary": 1400
+      },
+      "total": 5600,
+      "split_80_20": {
+        "train_subset": 4480,
+        "val_subset": 1120
+      }
+    },
+    "test": {
+      "per_class": {
+        "glioma": 400,
+        "meningioma": 400,
+        "notumor": 400,
+        "pituitary": 400
+      },
+      "total": 1600
+    },
+    "grand_total": 7200
+  },
+  "models": {
+    "brain_tumor_efficientnet.pth": {
+      "weights_file": "models/brain_tumor_efficientnet.pth",
+      "weights_size_mb": 16.35,
+      "total_parameters": 4012672,
+      "trainable_parameters": 4012672,
+      "test_images": 1600,
+      "classes": [
+        "glioma",
+        "meningioma",
+        "notumor",
+        "pituitary"
+      ],
+      "test_accuracy_pct": 93.0625,
+      "balanced_accuracy_pct": 93.0625,
+      "top2_accuracy_pct": 97.125,
+      "test_loss": 0.436,
+      "misclassified_count": 111,
+      "macro_precision": 0.9407,
+      "macro_recall": 0.9306,
+      "macro_f1": 0.9296,
+      "weighted_f1": 0.9296,
+      "roc_auc_ovr_macro": 0.992304,
+      "cohen_kappa": 0.9075,
+      "matthews_corrcoef": 0.9113,
+      "per_class": {
+        "glioma": {
+          "precision": 1.0,
+          "recall": 0.7675,
+          "f1": 0.8685,
+          "support": 400
+        },
+        "meningioma": {
+          "precision": 0.8169,
+          "recall": 0.9925,
+          "f1": 0.8962,
+          "support": 400
+        },
+        "notumor": {
+          "precision": 0.9659,
+          "recall": 0.9925,
+          "f1": 0.979,
+          "support": 400
+        },
+        "pituitary": {
+          "precision": 0.9798,
+          "recall": 0.97,
+          "f1": 0.9749,
+          "support": 400
+        }
+      },
+      "confusion_matrix": [
+        [
+          307,
+          74,
+          13,
+          6
+        ],
+        [
+          0,
+          397,
+          1,
+          2
+        ],
+        [
+          0,
+          3,
+          397,
+          0
+        ],
+        [
+          0,
+          12,
+          0,
+          388
+        ]
+      ],
+      "binary_tumor_vs_notumor": {
+        "tp": 1186,
+        "tn": 397,
+        "fp": 3,
+        "fn": 14,
+        "sensitivity_recall_pct": 98.8333,
+        "specificity_pct": 99.25,
+        "precision_pct": 99.7477,
+        "missed_tumors_false_negatives": 14
+      },
+      "mean_confidence_pct": 97.74,
+      "mean_confidence_when_correct_pct": 98.75,
+      "mean_confidence_when_wrong_pct": 84.26,
+      "total_inference_seconds": 27.62,
+      "throughput_images_per_sec": 57.9,
+      "latency_ms_per_image": 17.26,
+      "device": "mps"
+    },
+    "brain_tumor_efficientnet_augmented.pth": {
+      "weights_file": "models/brain_tumor_efficientnet_augmented.pth",
+      "weights_size_mb": 16.35,
+      "total_parameters": 4012672,
+      "trainable_parameters": 4012672,
+      "test_images": 1600,
+      "classes": [
+        "glioma",
+        "meningioma",
+        "notumor",
+        "pituitary"
+      ],
+      "test_accuracy_pct": 95.1875,
+      "balanced_accuracy_pct": 95.1875,
+      "top2_accuracy_pct": 96.4375,
+      "test_loss": 0.4739,
+      "misclassified_count": 77,
+      "macro_precision": 0.9551,
+      "macro_recall": 0.9519,
+      "macro_f1": 0.9509,
+      "weighted_f1": 0.9509,
+      "roc_auc_ovr_macro": 0.995018,
+      "cohen_kappa": 0.9358,
+      "matthews_corrcoef": 0.9374,
+      "per_class": {
+        "glioma": {
+          "precision": 0.997,
+          "recall": 0.83,
+          "f1": 0.9059,
+          "support": 400
+        },
+        "meningioma": {
+          "precision": 0.8991,
+          "recall": 0.98,
+          "f1": 0.9378,
+          "support": 400
+        },
+        "notumor": {
+          "precision": 0.939,
+          "recall": 1.0,
+          "f1": 0.9685,
+          "support": 400
+        },
+        "pituitary": {
+          "precision": 0.9852,
+          "recall": 0.9975,
+          "f1": 0.9913,
+          "support": 400
+        }
+      },
+      "confusion_matrix": [
+        [
+          332,
+          43,
+          25,
+          0
+        ],
+        [
+          1,
+          392,
+          1,
+          6
+        ],
+        [
+          0,
+          0,
+          400,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          399
+        ]
+      ],
+      "binary_tumor_vs_notumor": {
+        "tp": 1174,
+        "tn": 400,
+        "fp": 0,
+        "fn": 26,
+        "sensitivity_recall_pct": 97.8333,
+        "specificity_pct": 100.0,
+        "precision_pct": 100.0,
+        "missed_tumors_false_negatives": 26
+      },
+      "mean_confidence_pct": 99.22,
+      "mean_confidence_when_correct_pct": 99.78,
+      "mean_confidence_when_wrong_pct": 88.08,
+      "total_inference_seconds": 23.93,
+      "throughput_images_per_sec": 66.9,
+      "latency_ms_per_image": 14.96,
+      "device": "mps"
+    }
+  }
+}

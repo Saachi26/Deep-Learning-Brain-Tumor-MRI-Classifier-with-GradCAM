@@ -1,0 +1,8 @@
+# Trained model weights (.pth files) are written here by the training scripts.
+#
+# The Streamlit app and evaluate.py expect:
+#   models/brain_tumor_efficientnet_augmented.pth
+#
+# Run the training scripts (see README "Train the Model") to generate it,
+# or drop your own saved .pth here.
+# This file only exists so the empty folder is kept in git.

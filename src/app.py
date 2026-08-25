@@ -120,11 +120,11 @@ with st.sidebar:
             ">
                 <strong style="display: block; margin-bottom: 8px;">ℹ️ Model Info</strong>
                 Architecture: EfficientNet-B0<br>
-                Accuracy: 99.39%<br>
+                Accuracy: 95.19% (test)<br>
                 Training: Augmented Data
             </div>
         """, unsafe_allow_html=True)
-    # --- BOTTOM FOOTER (Sticky) ---
+    # --- BOTTOM FOOTER ---
     st.markdown("---")
     st.markdown("""
 <div style="margin-top: 5vh; padding-bottom: 20px;">
@@ -146,11 +146,11 @@ with st.sidebar:
 </div>
 </div>
 """, unsafe_allow_html=True)
-
+   
 # --- 5. MAIN INTERFACE ---
 st.markdown("<h1 style='text-align: center; margin-bottom: 30px;'>🧠 AI-Powered Brain Tumor Detection</h1>", unsafe_allow_html=True)
 
-if uploaded_file is not None:
+if uploaded_file is not None: 
     # --- ANALYSIS MODE ---
     image = Image.open(uploaded_file).convert('RGB')
     transform = transforms.Compose([
@@ -238,7 +238,7 @@ else:
         <div style="text-align: center; margin-top: 20px;">
             <h3>👋 Welcome to NeuroScan</h3>
             <p style="color: #888;">
-                This tool uses Deep Learning (EfficientNet) to detect brain tumors with 99.4% accuracy.<br>
+                This tool uses Deep Learning (EfficientNet) to detect brain tumors with 95.19% test accuracy.<br>
                 Please upload an MRI scan from the <b>sidebar</b> to begin diagnostics.
             </p>
         </div>

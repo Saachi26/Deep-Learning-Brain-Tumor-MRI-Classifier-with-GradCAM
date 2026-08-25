@@ -1,0 +1,16 @@
+# Place the dataset here. Expected layout:
+#
+# data/
+# ├── Training/
+# │   ├── glioma/
+# │   ├── meningioma/
+# │   ├── notumor/
+# │   └── pituitary/
+# └── Testing/
+#     ├── glioma/
+#     ├── meningioma/
+#     ├── notumor/
+#     └── pituitary/
+#
+# See the README ("Dataset Setup") for the download link.
+# This file only exists so the empty folder is kept in git.
