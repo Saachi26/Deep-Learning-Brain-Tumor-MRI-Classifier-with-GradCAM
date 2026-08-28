@@ -131,6 +131,12 @@ python src/evaluate.py        # classification report + confusion matrix for the
 python src/report_metrics.py  # full report: every checkpoint, all metrics → reports/
 ```
 
+Regenerate the Grad-CAM figures used below:
+
+```bash
+python src/make_heatmap_figure.py   # → assets/HeatMap.png, assets/HeatMapFailure.png
+```
+
 ---
 
 ## 📈 Model performance
@@ -216,9 +222,24 @@ the original scan:
 
 ![Heatmap Visualization](assets/HeatMap.png)
 
+*One correctly-classified held-out test image per class. Regenerate with
+`python src/make_heatmap_figure.py`.*
+
 This is a debugging tool as much as a presentation one: if attention sits off the tumour
 while the model still predicts correctly, the prediction is being driven by something
-other than the lesion.
+other than the lesion — and that is visible above. The maps are informative but not
+crisply lesion-localised: attention frequently sits on the skull rim and surrounding
+background rather than tightly on the mass. Two structural reasons, both real: the map is
+7x7 upsampled 32x to 224x224, so its finest resolution is a 32-pixel block; and
+`show_cam_on_image` min-max normalises every map, so a hotspot always exists regardless of
+how weak the underlying evidence was.
+
+Running the same thing on an error is more useful than running it on a success:
+
+![Grad-CAM failure case](assets/HeatMapFailure.png)
+
+*A glioma confidently classified as no-tumour. Attention is diffuse and largely outside
+the brain — the model had no localised evidence and returned 95.4% confidence anyway.*
 
 ---
 
@@ -265,7 +286,8 @@ Stated plainly, because a number without its caveats is not a result.
 │   ├── finetune.py            # earlier experiment, not in the final pipeline
 │   ├── evaluate.py            # classification report + confusion matrix
 │   ├── predict.py             # single-image prediction + Grad-CAM
-│   └── report_metrics.py      # full reproducible metrics report
+│   ├── report_metrics.py      # full reproducible metrics report
+│   └── make_heatmap_figure.py # regenerates the Grad-CAM figures in assets/
 ├── reports/                   # generated: metrics.json, metrics.md, confusion matrices
 ├── assets/                    # figures used in this README
 ├── data/                      # dataset (not committed)
